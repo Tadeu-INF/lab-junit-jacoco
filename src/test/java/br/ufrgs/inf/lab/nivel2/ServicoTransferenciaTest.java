@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import br.ufrgs.inf.lab.nivel1.Conta;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**

@@ -8,7 +8,49 @@
 Cole aqui o resumo que aparece no final de `java scripts/Rodar.java`:
 
 ```
-(cole aqui)
+ Compilando o codigo...
+>> Compilando os testes...
+>> Rodando os testes...
+
+.
++-- JUnit Platform Suite [OK]
++-- JUnit Jupiter [OK]
+| +-- ContaTest [OK]
+| | +-- saqueValidoDeveDiminuirOSaldo() [OK]
+| | +-- contaNovaDeveGuardarTitularESaldoInicial() [OK]
+| | +-- saqueMaiorQueOSaldoDeveSerRecusado() [OK]
+| | +-- depositoValidoDeveAumentarOSaldo() [OK]
+| | +-- depositoComValorNegativoDeveSerRecusado() [OK]
+| | '-- saqueDoSaldoExatoDeveSerPermitidoEZerarAConta() [OK]
+| +-- ServicoTransferenciaTest [OK]
+| | +-- saldoInsuficienteParaValorMaisTarifaNaoAlteraNenhumaConta() [OK]
+| | +-- transferenciaAcimaDe1000PagaTarifaDe1Porcento() [OK]
+| | +-- transferenciaPequenaDeveSerAceitaSemTarifa() [OK]
+| | +-- mesmaContaEValorInvalidoDevemSerRecusados() [OK]
+| | +-- transferenciaAcimaDoLimiteDeveSerRecusada() [OK]
+| | '-- transferenciaDeExatamente1000NaoPagaTarifa() [OK]
+| '-- AnalisadorEmprestimoTest [OK]
+|   +-- e280Negado() [OK]
+|   +-- entradasDadosInvalida() [OK]
+|   +-- visaoComprometimentoParcelaRenda() [OK]
+|   +-- parcelaMensalPrice() [OK]
+|   +-- comprometimentoAnaliseManual() [OK]
+|   '-- taxaJurosConformeEscore() [OK]
+'-- JUnit Vintage [OK]
+
+Test run finished after 79 ms
+[         6 containers found      ]
+[         0 containers skipped    ]
+[         6 containers started    ]
+[         0 containers aborted    ]
+[         6 containers successful ]
+[         0 containers failed     ]
+[        18 tests found           ]
+[         0 tests skipped         ]
+[        18 tests started         ]
+[         0 tests aborted         ]
+[        18 tests successful      ]
+[         0 tests failed          ]
 ```
 
 ## 2. Nível 1: `if`s de `Conta`
@@ -18,20 +60,28 @@ Para cada `if` de `Conta.java`, diga qual teste faz o `if` ser **verdadeiro** e 
 
 | `if` (condição) | Teste que torna **verdadeiro** | Teste que torna **falso** |
 |---|---|---|
-| saldo inicial negativo (construtor) | | |
-| valor do depósito `<= 0` | | |
-| valor do saque `<= 0` | | |
-| saque maior que o saldo | | |
+| saldo inicial negativo (construtor) |         Conta conta = new Conta("Ana", -100.0);
+|         Conta conta = new Conta("Ana", 100.0);
+|
+| valor do depósito `<= 0` |         boolean inserindo = conta.depositar(10.0);
+|         boolean negativado = conta.depositar(-10.0);
+|
+| valor do saque `<= 0` | sacando = conta.sacar(30.0) | sacando = conta.sacar(-30.0) |
+| saque maior que o saldo |         boolean recusavel = conta.sacar(100.01);
+ |         boolean recusavel = conta.sacar(100.00);
+|
 
 ## 3. Nível 2: regras de `ServicoTransferencia`
 
 | Regra | Teste(s) que a exercita(m) |
 |---|---|
-| R1 mesma conta | |
-| R2 valor <= 0 | |
-| R3 acima do limite de 5.000 (e 5.000 exatos permitido) | |
-| R4 saldo insuficiente para valor + tarifa (nada é alterado); tarifa de 1% acima de 1.000 (1.000 exatos sem tarifa) | |
-| R5 transferência OK: saldos da origem e do destino | |
+| R1 mesma conta | mesmaContaEValorInvalidoDevemSerRecusados()|
+| R2 valor <= 0 |  mesmaContaEValorInvalidoDevemSerRecusados()|
+| R3 acima do limite de 5.000 (e 5.000 exatos permitido) | transferenciaAcimaDoLimiteDeveSerRecusada()
+|
+| R4 saldo insuficiente para valor + tarifa (nada é alterado); tarifa de 1% acima de 1.000 (1.000 exatos sem tarifa) | transferenciaAcimaDe1000PagaTarifaDe1Porcento ()
+transferenciaDeExatamente1000NaoPagaTarifa()|
+| R5 transferência OK: saldos da origem e do destino | transferenciaPequenaDeveSerAceitaSemTarifa(), transferenciaAcimaDe1000PagaTarifaDe1Porcento(), transferenciaDeExatamente1000NaoPagaTarifa()|
 
 ## 4. Nível 3: regras de `AnalisadorEmprestimo`
 

@@ -14,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import br.ufrgs.inf.lab.nivel1.Conta;
 import br.ufrgs.inf.lab.nivel2.ServicoTransferencia;
+import br.ufrgs.inf.lab.nivel2.StatusTransferencia;
+import br.ufrgs.inf.lab.nivel3.AnalisadorEmprestimo;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -24,49 +26,84 @@ class AnalisadorEmprestimoTest {
     private static final double DELTA = 0.001;
 
     private ServicoTransferencia servico;
+    private AnalisadorEmprestimo analisador;
     private Conta origem;
     private Conta destino;
 
+    //valores necessários por mim.
+
+
+        // copiado do resto
         // Roda ANTES de cada teste: garante contas "limpas" (testes independentes)
     @BeforeEach
     void preparar() {
         servico = new ServicoTransferencia();
+        analisador = new AnalisadorEmprestimo();
         origem = new Conta("Origem", 10_000.0);
         destino = new Conta("Destino", 0.0);
+
     }
 
 
     @Test
-    @Disabled("N3-A")
     void entradasDadosInvalida() {
         //*  1. Entradas inválidas -> DADOS_INVALIDOS
         //*       score fora de 0..1000, renda <= 0, valor <= 0, parcelas < 1 ou > 360.
-        fail("Escreva o teste N3-A");
+
+
+        //pegando cada um dos testes de forma inicial
+        DecisaoEmprestimo sAnalise0 = analisador.analisar(1001, 20.3, 40.3, 200);
+
+        DecisaoEmprestimo sAnalise1 = analisador.analisar(950, -5, 40.3, 200);
+
+        DecisaoEmprestimo sAnalise2 = analisador.analisar(950, 20.3, -5, 200);
+
+        DecisaoEmprestimo sAnalise3 = analisador.analisar(950, 20.3, 40.3, 365);
+
+        assertEquals(DecisaoEmprestimo.DADOS_INVALIDOS, sAnalise0);
+
+        assertEquals(DecisaoEmprestimo.DADOS_INVALIDOS, sAnalise1);
+
+        assertEquals(DecisaoEmprestimo.DADOS_INVALIDOS, sAnalise2);
+
+        assertEquals(DecisaoEmprestimo.DADOS_INVALIDOS, sAnalise3);
+        
     }
 
     @Test
-    @Disabled("N3-B")
-    void escoreAbaixoNegado() {
+    void e280Negado() {
         //  2. score < 300 -> NEGADO (nem calcula parcela).
-        fail("Escreva o teste N3-B");
+
+        DecisaoEmprestimo sAnalise = analisador.analisar(280, 20.3, 40.3, 200);
+        assertEquals(DecisaoEmprestimo.NEGADO, sAnalise);
     }
 
     @Test
-    @Disabled("N3-C")
     void taxaJurosConformeEscore() {
         /*  3. Taxa de juros ANUAL conforme o score:
  *       score >= 800 -> 12%   |   score >= 600 -> 24%   |   demais -> 36%
         */
-        fail("Escreva o teste N3-C");
+        double taxa1 = analisador.taxaAnual(800);
+
+        double taxa2 = analisador.taxaAnual(600);
+        
+        double taxa3 = analisador.taxaAnual(300);
+        
+        assertEquals(0.12, taxa1);
+
+        assertEquals(0.24, taxa2);
+
+        assertEquals(0.36, taxa3);
     }
 
     @Test
-    @Disabled("N3-D")
     void parcelaMensalPrice() {
         /*  4. Parcela mensal (tabela Price) com taxa mensal = anual / 12:
  *       parcela = valor * i / (1 - (1 + i)^(-n))
         */
-        fail("Escreva o teste N3-D");
+
+        double valorp = analisador.calcularParcela(5000, 0.02, 6);
+        assertEquals(892.6290616760119, valorp);
     }
 
     @Test

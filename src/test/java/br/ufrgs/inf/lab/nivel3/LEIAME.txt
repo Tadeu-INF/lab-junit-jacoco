@@ -4,13 +4,3 @@ Meta: pelo menos um teste para cada regra (1 a 6) do comentario de AnalisadorEmp
 incluindo os valores de fronteira. Rode com:  java scripts/Rodar.java
 */
 
-package br.ufrgs.inf.lab.nivel2;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-import br.ufrgs.inf.lab.nivel1.Conta;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
-ANal
